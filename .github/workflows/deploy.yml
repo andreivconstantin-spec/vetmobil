@@ -1,0 +1,58 @@
+name: FTP Deploy
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+
+jobs:
+  deploy-staging:
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Dacă ai build (npm run build) îl pui aici, altfel lasă comentat
+      # - run: npm ci && npm run build
+
+      - name: Deploy to STAGING
+        uses: SamKirkland/FTP-Deploy-Action@v4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          # directorul subdomeniului de staging:
+          server-dir: /public_html/staging
+          protocol: ftps
+          exclude: |
+            .git*
+            .github/**
+            README.md
+            **/.DS_Store
+            # Nu suprascrie fișiere generate pe server:
+            assets/uploads/**
+            data/articles/**
+
+  deploy-production:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # dacă ai build:
+      # - run: npm ci && npm run build
+
+      - name: Deploy to PRODUCTION
+        uses: SamKirkland/FTP-Deploy-Action@v4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          server-dir: /public_html
+          protocol: ftps
+          exclude: |
+            .git*
+            .github/**
+            README.md
+            **/.DS_Store
+            assets/uploads/**
+            data/articles/**
