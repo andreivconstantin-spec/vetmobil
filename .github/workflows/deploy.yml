@@ -21,7 +21,7 @@ jobs:
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASS }}
           # directorul subdomeniului de staging:
-          server-dir: /public_html/staging/
+          server-dir: /staging/
           protocol: ftps
           exclude: |
             .git*
@@ -47,7 +47,7 @@ jobs:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASS }}
-          server-dir: /public_html/
+          server-dir: /
           protocol: ftps
           exclude: |
             .git*
