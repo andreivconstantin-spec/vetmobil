@@ -1,0 +1,262 @@
+<!DOCTYPE html> <!-- Declară tipul documentului ca HTML5 -->
+<html lang="ro"> <!-- Deschide documentul HTML și setează limba principală ca română -->
+
+<head> <!-- Secțiunea HEAD conține metadate, titlu și legături externe -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FV95L6KXZP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-FV95L6KXZP');
+</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Servicii veterinare la domiciliu – Consultații, vaccinări și urgențe | VetMobil București & Ilfov</title>
+  <meta name="description" content="Descoperă serviciile VetMobil: consultații, vaccinări, tratamente, urgențe și eutanasie umană pentru câini și pisici, la domiciliu în București și Ilfov.">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph pentru Facebook / LinkedIn -->
+  <meta property="og:title" content="Servicii veterinare la domiciliu – VetMobil">
+  <meta property="og:description" content="Consultații, vaccinări, tratamente și urgențe veterinare pentru câini și pisici, la domiciliu în București și Ilfov.">
+  <meta property="og:image" content="https://vetmobil.ro/assets/og-image.webp">
+  <meta property="og:url" content="https://vetmobil.ro/services.html">
+  <meta property="og:type" content="website">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Servicii veterinare la domiciliu – VetMobil">
+  <meta name="twitter:description" content="Consultații, vaccinări, tratamente și urgențe veterinare pentru câini și pisici, la domiciliu în București și Ilfov.">
+  <meta name="twitter:image" content="https://vetmobil.ro/assets/og-image.webp">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VeterinaryCare",
+  "name": "VetMobil",
+  "image": "https://vetmobil.ro/assets/logo.png",
+  "@id": "https://vetmobil.ro/servicii",
+  "url": "https://vetmobil.ro/servicii",
+  "telephone": "+40 748 650 942",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "București",
+    "addressRegion": "Ilfov",
+    "addressCountry": "RO"
+  },
+  "areaServed": {
+  "@type": "Place",
+  "name": "București & Ilfov"
+  },
+  "openingHours": "Mo-Su 09:00-21:00",
+  "priceRange": "200-500 RON",
+  "makesOffer": [
+    {
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": "Consultație generală",
+        "description": "Examinare clinică, recomandări și plan terapeutic la domiciliu."
+      },
+      "price": "100 RON",
+      "priceCurrency": "RON"
+    },
+    {
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": "Vaccinare câine/pisică",
+        "description": "Vaccinuri polivalente și antirabice administrate la domiciliu."
+      },
+      "price": "50-100 RON",
+      "priceCurrency": "RON"
+    },
+    {
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": "Tratament la domiciliu",
+        "description": "Administrare perfuzii, tratamente simptomatice și proceduri simple."
+      },
+      "price": "100-300 RON",
+      "priceCurrency": "RON"
+    },
+    {
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": "Eutanasie umană & incinerare",
+        "description": "Serviciu uman, la domiciliu, cu respect pentru animal."
+      },
+      "price": "150-500 RON",
+      "priceCurrency": "RON"
+    }
+  ],
+  "sameAs": [
+    "https://www.facebook.com/vetmobil",
+    "https://www.instagram.com/vetmobil"
+  ]
+}
+</script>
+
+
+  <!-- Favicons -->
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" 
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600;700&display=swap" 
+      as="style" 
+      onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+  <link rel="stylesheet" 
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600;700&display=swap">
+</noscript>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.v11.css?v=10" />
+</head>
+
+<body class="services-page"> <!-- Deschide BODY și adaugă clasa specifică paginii de servicii -->
+
+  <header class="site-header"> <!-- Header-ul site-ului, cu logo și meniu -->
+    <div class="container"> <!-- Container pentru centrare și layout -->
+
+      <!-- Grupăm logo + brand -->
+      <div class="brand-wrapper"> <!-- Wrapper pentru logo și numele brandului -->
+        <div class="logo-box"> <!-- Container pentru imaginea logo-ului -->
+          <source srcset="assets/logo.webp" type="image/webp">
+          <img src="assets/logo.png" alt="VetMobil Logo" class="site-logo"> <!-- Logo-ul VetMobil -->
+        </div>
+        <h1 id="brand"> <!-- Titlul principal al brandului -->
+          Vet<span>Mobil</span> <!-- Numele brandului cu stiluri pe span -->
+        </h1>
+      </div>
+
+      <!-- Meniul va fi încărcat dinamic -->
+      <div id="menu"></div>
+
+    </div>
+  </header>
+
+<main> <!-- Conținutul principal al paginii -->
+  <section class="section"> 
+    <div class="container">
+
+      <!-- BREADCRUMB -->
+      <nav class="breadcrumb" aria-label="breadcrumb">
+        <a href="index.html">Acasă</a>
+        <span class="sep">›</span>
+        <span>Servicii</span>
+      </nav>
+
+      <div class="section-header">
+        <h2 class="seo-section">Servicii veterinare la domiciliu în București & Ilfov – Prețuri</h2>
+        <a href="#" class="btn print-hide" onclick="window.print();return false;">Descarcă PDF tarife</a>
+      </div>
+
+      <p>
+        Oferim consultații, vaccinări, tratamente, urgențe, eutanasie și incinerare pentru câini și pisici, direct la domiciliu în București și Ilfov. 
+        Mai jos găsești lista completă de servicii și tarife, structurată pe categorii.
+      </p>
+
+      <!-- Deplasare -->
+      <h3 class="seo-subsection">Deplasare</h3>
+      <p>
+      Serviciul de deplasare acoperă București și Ilfov, cu tarif diferențiat în funcție de oră și zi. 
+      Folosim întotdeauna rute calculate pe Waze pentru transparență si punctualitate.
+      </p>
+      <div id="deplasare" class="grid"></div>
+
+      <!-- Consultație generală -->
+      <h3 class="seo-subsection">Consultație generală</h3>
+      <p>
+      Consultația veterinară la domiciliu include anamneză, examinare completă și recomandări scrise. 
+      Astfel, animalul beneficiază de confortul propriei locuințe, fără stresul transportului sau al așteptării într-o clinică aglomerată.
+      </p>
+      <div id="consultatie" class="grid"></div>
+
+      <!-- Vaccinare -->
+      <h3 class="seo-subsection">Vaccinare câine/pisică</h3>
+      <p>
+      Vaccinările sunt adaptate speciei, vârstei și istoricului medical al animalului. 
+      Folosim vaccinuri autorizate și completăm carnetul de sănătate pe loc, direct la domiciliu, pentru o protecție sigură și conformă legislației.
+      </p>
+      <div id="vaccinare" class="grid"></div>
+
+      <!-- Administrativ -->
+      <h3 class="seo-subsection">Administrativ / Documente</h3>
+      <p>
+      Emitem pe loc carnet de sănătate cu serie, pașaport pentru animale de companie și efectuăm microciparea conform normelor ANSVSA. 
+      De asemenea, înregistrăm microcipurile în baza de date RECS, astfel încât animalul să fie legal identificat și protejat.
+      </p>
+      <div id="administrativ" class="grid"></div>
+
+      <!-- Servicii medicale -->
+      <h3 class="seo-subsection">Servicii medicale</h3>
+      <p>
+      Oferim tratamente și proceduri veterinare la domiciliu, de la perfuzii, branule și suturi, până la toaleta plăgilor sau administrarea medicației. 
+      Scopul este să reducem disconfortul și deplasările inutile, păstrând în același timp standardul medical.
+      </p>
+      <div id="medicale" class="grid"></div>
+
+      <!-- Investigații -->
+      <h3 class="seo-subsection">Investigații</h3>
+      <p>
+      Testele rapide si recoltarea pentru analizele de laborator pot fi efectuate la domiciliu, atunci când situația o permite. 
+      Pentru investigații complexe, colaborăm cu clinici de specialitate, asigurând o continuitate medicală sigură și eficientă.
+      </p>
+      <div id="investigatii" class="grid"></div>
+
+      <!-- Eutanasie -->
+      <h3 class="seo-subsection">Eutanasiere & Incinerare</h3>
+      <p>
+      Oferim proceduri umane și respectuoase pentru animalele aflate în suferință, cu posibilitatea de incinerare individuală sau colectivă. 
+      Ne asigurăm că întreg procesul se desfășoară cu empatie, profesionalism și respect pentru legătura dintre tine și companionul tău.
+      </p>
+      <div id="eutanasie" class="grid"></div>
+
+    </div>
+  </section>
+</main>
+
+  <footer id="contact" class="site-footer"> <!-- Footer-ul site-ului -->
+    <div class="container footer-top"> <!-- Container pentru partea de sus a footerului -->
+    
+      <!-- Coloana stânga: Contact + carduri -->
+      <div class="card contact-card"> <!-- Card pentru informații de contact -->
+        <div class="footer-contact"> <!-- Subsecțiune pentru detalii de contact -->
+          <h3>Contact</h3> <!-- Titlu secțiune contact -->
+          <p><strong>Telefon:</strong> <a id="phone" href="tel:+40748650942">+40 748 650 942</a></p> <!-- Număr de telefon -->
+          <p><strong>WhatsApp:</strong> <a id="whatsapp" href="https://wa.me/0748650942" target="_blank" rel="noopener">Scrie pe WhatsApp</a></p> <!-- Link WhatsApp -->
+          <p><strong>Email:</strong> <a id="email" href="mailto:programari@vetmobil.ro">programari@vetmobil.ro</a></p> <!-- Adresă de email -->
+          <p><strong>Program:</strong> <span id="hours">Luni–Duminică, 09:00–21:00</span></p> <!-- Programul de lucru -->
+        </div>
+
+        <div class="card mini"> <!-- Card mic adițional -->
+          <h4>Zone acoperite</h4> <!-- Titlu secțiune zone -->
+          <p id="coverage">București & Ilfov</p> <!-- Zonele acoperite -->
+          <h4>Plată</h4> <!-- Titlu secțiune plată -->
+          <p id="payments">Cash, card, transfer</p> <!-- Metode de plată acceptate -->
+        </div>
+      </div><!-- /footer-contact -->
+
+      <!-- Legal va fi încărcat dinamic -->
+      <div id="legal"></div>
+
+    </div><!-- /container footer-top -->
+
+    <div class="container footer-bottom"> <!-- Container partea de jos a footerului -->
+      <p>© <span id="year"></span> <span id="brandFooter">VetMobil</span></p> <!-- Text copyright cu an dinamic -->
+    </div>
+  </footer>
+
+  <script src="script.v5.js?v=9" defer></script> <!-- Script extern pentru logica suplimentară -->
+
+</body>
+</html>

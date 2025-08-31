@@ -1,0 +1,28 @@
+User-agent: googlebot-mobile
+Crawl-delay: 10
+Disallow:
+
+User-agent: googlebot
+Crawl-delay: 10
+Disallow:
+
+User-agent: google
+Crawl-delay: 10
+Disallow:
+
+User-agent: bingbot
+Crawl-delay: 10
+Disallow:
+
+User-agent: bing
+Crawl-delay: 10
+Disallow:
+
+User-agent: facebookexternalhit
+Crawl-delay: 10
+Disallow:
+
+User-agent: *
+Disallow: 
+
+Sitemap: https://vetmobil.ro/sitemap.xml

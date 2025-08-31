@@ -1,0 +1,62 @@
+backend:
+  name: test-repo
+  url: https://vetmobil.ro/cms-api/articles.php
+
+media_folder: "assets/uploads"
+public_folder: "/assets/uploads"
+
+local_backend: true
+
+collections:
+  - name: "data"
+    label: "Date Site"
+    files:
+      - label: "Servicii & Setări"
+        name: "services"
+        file: "data/services.json"
+        format: "json"
+        fields:
+          - label: "Brand"
+            name: "site.brand"
+            widget: "string"
+          - label: "Telefon"
+            name: "site.phone"
+            widget: "string"
+          - label: "WhatsApp (fără +)"
+            name: "site.whatsapp"
+            widget: "string"
+          - label: "Email"
+            name: "site.email"
+            widget: "string"
+          - label: "Program"
+            name: "site.hours"
+            widget: "string"
+          - label: "Zone acoperite"
+            name: "site.coverage"
+            widget: "string"
+          - label: "Metode de plată"
+            name: "site.payments"
+            widget: "string"
+          - label: "Servicii"
+            name: "services"
+            widget: "list"
+            summary: "{{fields.name}} — {{fields.price}}"
+            fields:
+              - {label: "Denumire", name: "name", widget: "string"}
+              - {label: "Descriere", name: "description", widget: "text", required: false}
+              - {label: "Preț", name: "price", widget: "string"}
+              - {label: "Tag", name: "tag", widget: "string", required: false}
+  - name: "articles"
+    label: "Articole"
+    folder: "data/articles"
+    create: true
+    slug: "{{fields.title | slug}}"
+    extension: "json"
+    format: "json"
+    fields:
+      - { label: "Titlu", name: "title", widget: "string" }
+      - { label: "Descriere", name: "description", widget: "text" }
+      - { label: "Imagine", name: "image", widget: "image" }
+      - { label: "Link", name: "link", widget: "string", default: "#" }
+      - { label: "Data", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
+      - { label: "Conținut", name: "content", widget: "markdown" }

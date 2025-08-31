@@ -1,0 +1,811 @@
+/* =======================================================================
+   VARIABILE GLOBALE
+   Folosim :root pentru a defini culori și valori reutilizabile peste tot.
+   ======================================================================= */
+:root {
+  --bg:#fff;                /* culoare fundal general (alb) */
+  --text:#0f172a;           /* culoare text principal (albastru foarte închis) */
+  --muted:#64748b;          /* culoare text secundar (gri albastru) */
+  --card:#fff;              /* fundal pentru carduri (alb) */
+  --border:#e2e8f0;         /* culoare pentru borduri (gri deschis) */
+  --accent:#0ea5e9;         /* culoare accent (albastru deschis) */
+  --accent-contrast:#fff;   /* culoare text pe fundal accent (alb) */
+}
+
+/* =======================================================================
+   RESET / BASE STYLES
+   Normalizează margin/padding și definește fonturile și fundalul global.
+   ======================================================================= */
+* { 
+  box-sizing:border-box;    /* include padding + border în dimensiunea totală a elementului */
+  min-width:0;              /* previne ca elementele flex/grid să provoace overflow orizontal */
+}
+html, body {
+  margin:0;                 /* elimină marginile implicite ale browserului */
+  padding:0;                /* elimină padding-ul implicit */
+  color:var(--text);        /* textul implicit are culoarea definită în --text */
+  font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; /* font stack fallback */
+  overflow-x:hidden;        /* dezactivează scroll pe orizontală */
+  background:linear-gradient(180deg, #f1f5f9, #fff); /* fundal global cu gradient gri → alb */
+}
+h1,h2,h3,h4 {
+  font-family:Poppins,Inter,sans-serif; /* titlurile folosesc Poppins */
+  color:#0f172a;                        /* culoare fixă (albastru închis) */
+  margin:0 0 8px;                       /* spațiu dedesubt, 8px */
+}
+a { 
+  color:var(--accent);                  /* linkurile albastre (accent) */
+  text-decoration:none;                 /* fără subliniere implicită */
+}
+img,video,svg { 
+  max-width:100%;                       /* elementele media nu depășesc containerul */
+  height:auto;                          /* păstrează proporțiile */
+  display:block;                        /* elimină spațiul alb de tip inline */
+}
+ul { 
+  list-style:none;                      /* elimină bulinele implicite */
+  padding:0;                            /* scoate indentarea */
+  margin:0;                             /* scoate spațiul exterior */
+}
+
+/* =======================================================================
+   SEO HEADINGS (secțiuni și sub-secțiuni optimizate)
+   ======================================================================= */
+.seo-section {
+  font-size: 22px;      /* puțin mai mare decât text normal */
+  font-weight: 600;     /* evidențiat */
+  margin: 24px 0 12px 0;
+  color: #0f172a;
+}
+
+.seo-subsection {
+  font-size: 18px;      
+  font-weight: 500;
+  margin: 16px 0 8px 0;
+  color: #1e293b;
+}
+
+/* =======================================================================
+   CONTAINERE & SECȚIUNI
+   Structura de bază pentru conținut și spacing între secțiuni.
+   ======================================================================= */
+.container { 
+  max-width:1000px;         /* limitează lățimea conținutului central */
+  margin:0 auto;            /* centrează containerul pe orizontală */
+  padding:0 20px;           /* adaugă padding lateral (20px stânga/dreapta) */
+}
+.section { 
+  padding:10px 0;           /* spațiu vertical de 48px sus și jos */
+  scroll-margin-top:80px;   /* corectează poziția la ancorare (compensează header sticky) */
+  background:#fff;          /* fundal alb implicit pentru fiecare secțiune */
+}
+.section.alt { 
+  background:#fff;          /* variantă alternativă, dar rămâne alb */
+}
+.services-page .section:first-of-type { 
+  background:transparent;   /* pe pagina Servicii, prima secțiune păstrează gradientul body */
+}
+#acasa h3 {
+  margin-top: 20px;         /* spațiu doar pentru titlurile din secțiunea #acasa */
+}
+
+/* =======================================================================
+   HEADER
+   Zona fixă de sus cu logo și navigație.
+   ======================================================================= */
+.site-header {
+  background:#fff;                        /* fundal alb */
+  border-bottom:1px solid var(--border);  /* linie de separare gri */
+  position:sticky;                        /* header-ul rămâne fix */
+  top:0;                                  /* lipit de partea de sus */
+  z-index:50;                             /* se suprapune peste restul */
+}
+.site-header .container { 
+  display:flex;                  /* afișează logo + meniu pe linie */
+  align-items:center;            /* centrează pe verticală */
+  justify-content:space-between; /* logo la stânga, meniu la dreapta */
+  gap:12px;                      /* spațiu între elemente */
+}
+#mainNav { 
+  display:flex;                  /* meniul este un flex container */
+  gap:16px;                      /* spațiu între linkuri */
+  align-items:center;            /* aliniere verticală la centru */
+}
+#mainNav a { 
+  color:var(--text);             /* culoarea textului din meniu = principală */
+  font-weight:600;               /* bold mediu */
+}
+#mainNav a:hover { 
+  text-decoration:underline;     /* subliniere la hover */
+}
+#mainNav a[aria-current="page"] { 
+  color:var(--accent);           /* linkul paginii active = accent (albastru) */
+  text-decoration:underline;     /* și subliniat */
+}
+#mainNav, #mainNav * { 
+  list-style:none;               /* scoate bullets de la eventuale <ul> */
+}
+
+/* HAMBURGER MENU (buton vizibil doar pe mobil) */
+.menu-toggle {
+  display:none;                 /* ascuns pe desktop */
+  margin-left:auto;             /* împins spre marginea dreaptă */
+  background:#fff;              /* fundal alb */
+  border:1px solid var(--border); /* contur subțire gri */
+  border-radius:12px;           /* colțuri rotunjite */
+  padding:8px 12px;             /* spațiu interior (sus/jos 8px, stânga/dreapta 12px) */
+  font-size:22px;               /* dimensiune font pentru ☰ */
+  line-height:1;                /* fără extra spațiu pe verticală */
+  cursor:pointer;               /* cursor mână */
+  box-shadow:0 2px 10px rgba(0,0,0,.06); /* mică umbră subtilă */
+}
+
+/* =======================================================================
+   HERO
+   Prima secțiune sub header cu titlu mare și descriere.
+   ======================================================================= */
+.hero {
+  background:linear-gradient(180deg,#f1f5f9,#fff); /* gradient gri → alb */
+  padding:56px 0 10px;                                  /* spațiu vertical generos */
+}
+.hero p { 
+  color:var(--muted);             /* text gri secundar */
+  max-width:700px;                /* limitează lățimea paragrafului */
+}
+
+
+/* =======================================================================
+   CTA (Call To Action)
+   Butoane de acțiune (ex: "Programează o vizită")
+   ======================================================================= */
+/* === CTA – FIX text tăiat/înghesuit, aliniere corectă === */
+.cta {
+  display:inline-flex;            /* aliniere corectă pe verticală */
+  align-items:center;
+  justify-content:center;
+  margin-top:14px;
+  background:var(--accent);
+  color:var(--accent-contrast);
+  padding:12px 20px;
+  border-radius:10px;
+  font-weight:600;
+  font-size:16px;                 /* fă-l 15–16px după gust */
+  line-height:1.2;                /* previne tăierea pe Safari */
+  text-align:center;
+  white-space:normal;             /* permite 2 rânduri când e nevoie */
+  word-break:keep-all;
+  hyphens:none;
+  max-width:100%;                 /* nu depășește containerul */
+  height:auto !important;         /* anulează eventuale înălțimi fixe */
+  transition:.2s;
+}
+.cta:hover { 
+  transform:translateY(-1px);
+  opacity:.95;
+}
+
+/* mărimea „mică” rămâne valabilă */
+.card-header .cta.small {
+  padding: 6px 12px;
+  font-size: 0.95rem;
+  margin-top: 0;
+}
+
+/* =======================================================================
+   BRAND (Logo text VetMobil)
+   Forțăm consistența pe toate paginile: "Vet" albastru, "Mobil" alb.
+   ======================================================================= */
+#brand {
+  color:#0ea5e9 !important;   /* partea "Vet" = albastru accent */
+}
+#brand span {
+  color:#ffffff !important;   /* partea "Mobil" = alb */
+}
+
+/* =======================================================================
+   GDPR PAGE SPECIFIC
+   Titlu personalizat pentru pagina GDPR, independent de <h2> global.
+   ======================================================================= */
+.gdpr-title {
+  text-align: center;            /* centrat pe pagină */
+  font-size: 2rem;               /* puțin mai mare decât default h2 */
+  font-weight: 700;              /* bold */
+  margin-bottom: 20px;           /* spațiu dedesubt */
+  color: var(--text);            /* culoare identică cu restul textului */
+  text-decoration: underline;    /* subliniat */
+}
+
+/* =======================================================================
+   GRID & CARDS
+   Layout pe grid pentru carduri + design-ul cardurilor.
+   ======================================================================= */
+.grid { 
+  display:grid;                                
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); 
+  gap:16px;                                    
+}
+.card {
+  background:var(--card);                      
+  border:1px solid var(--border);              
+  border-radius:14px;                          
+  padding:16px;                                
+  box-shadow:0 4px 16px rgba(0,0,0,.05);       
+  max-width:100%;                              
+}
+.card { 
+  overflow: visible; 
+}
+.card-desc-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;             /* mic spațiu sub rând */
+}
+
+.card-desc-row p {
+  margin: 0;
+}
+
+.card h4 { 
+  margin:0 0 8px;                              
+}
+
+/* === Card Header (titlu + buton "Programează o vizită") === */
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+@media (max-width: 480px) {
+  .card-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .card-header .cta {
+    width: 100%;
+  }
+}
+.card-header h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.card-header .cta.small {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  margin-top: 0;
+}
+.price { 
+  font-weight:700;                             /* text bold */
+  margin:10px 0 0;                             /* spațiu sus 10px, rest 0 */
+}
+.badge {
+  display:inline-block;                        /* se comportă ca un "tag" */
+  background:#e2e8f0;                          /* gri deschis */
+  color:#0f172a;                               /* text albastru închis */
+  border-radius:999px;                         /* colțuri complet rotunjite (pastilă) */
+  padding:2px 10px;                            /* spațiu interior */
+  font-size:12px;                              /* font mic */
+  margin-left:8px;                             /* spațiu la stânga (lângă titlu) */
+}
+.card.has-table { 
+  overflow-x:hidden;                           /* dezactivează scroll orizontal */
+}
+@media (min-width:900px) { 
+  .grid .card.has-table { 
+    grid-column:span 2;                        /* pe ecrane mari, cardul cu tabel ocupă 2 coloane */
+  }
+}
+
+/* =======================================================================
+   CONTACT
+   Secțiunea contact împărțită în 2 coloane (text + form/card).
+   ======================================================================= */
+.contact { 
+  display:grid;                                /* activează CSS Grid */
+  grid-template-columns:2fr 1fr;               /* două coloane: stânga mai mare (2x) decât dreapta */
+  gap:16px;                                    /* spațiu între coloane */
+}
+
+/* =======================================================================
+   FOOTER
+   Organizare pe 2 coloane: contact stânga + carduri/meniu dreapta.
+   Ambele carduri ocupă 50% / 50% din lățimea gridului, au aceeași înălțime
+   și un aspect uniform. În plus:
+   - spațiul dintre informațiile de contact este redus (paragrafe compacte).
+   - în cardul din dreapta (Meniu + Legal) linkurile au spațiu mai mare între ele,
+     iar logo-ul SAL este centrat.
+   ======================================================================= */
+
+/* Container general pentru footer */
+.site-footer {
+  background:#f8fafc;              /* gri foarte deschis pentru fundalul footerului */
+  border-top:1px solid var(--border); /* linie subțire de separare de restul paginii */
+  padding:36px 0 16px;             /* spațiu interior: 36px sus, 16px jos */
+  color:var(--muted);              /* textul din footer apare în gri secundar */
+}
+
+/* Layout pe două coloane */
+.footer-top {
+  display:grid;                    /* activăm CSS Grid */
+  grid-template-columns:1fr 1fr;   /* două coloane egale: fiecare 50% */
+  gap:24px;                        /* spațiu de 24px între coloane */
+  align-items:stretch;             /* ambele carduri au aceeași înălțime */
+}
+
+/* Containerele mari pentru contact (stânga) și meniu+legal (dreapta) */
+.footer-contact,
+.footer-nav {
+display:block;
+}
+
+/* Cardurile efective (cutiile albe) */
+.footer-contact .contact-card,
+.footer-nav .nav-card {
+  width:100%;                      /* cardul ocupă toată lățimea coloanei */
+  height:100%;                     /* cardul se întinde pe întreaga înălțime disponibilă */
+  background:#fff;                 /* fundal alb pentru card */
+  border:1px solid var(--border);  /* contur subțire gri */
+  border-radius:12px;              /* colțuri rotunjite */
+  padding:8px 18px;                /* spațiu interior: 8px sus/jos, 18px lateral */
+  box-shadow:0 4px 16px rgba(0,0,0,.05); /* umbră subtilă */
+  display:flex;                    /* Flexbox pentru interior */
+  flex-direction:column;           /* conținutul aranjat vertical */
+  justify-content:center    ;      /* conținutul începe din centru */
+  text-align:center;               /* textul este centrat orizontal */
+}
+
+/* Textul din cardul de contact (Telefon, WhatsApp, Email, Program) */
+.footer-contact .contact-card p {
+  margin:2px 0;      /* spațiu vertical foarte mic între paragrafe */
+  line-height:1.3;   /* înălțimea rândurilor este mai mică pentru text compact */
+}
+
+/* Linie orizontală (folosită la cardul din dreapta) */
+.footer-right-card hr {
+  border:none;                     /* elimină borderul implicit */
+  border-top:1px solid var(--border); /* linie subțire orizontală */
+  margin:8px 0;                    /* spațiu sus și jos față de linie */
+}
+
+/* Listă din cardul din dreapta */
+.footer-right-card ul {
+  list-style:none;                 /* scoatem bulinele implicite */
+  padding:0;                       /* eliminăm indentarea implicită */
+  margin:8px 0 0;                  /* mic spațiu sus (8px), rest 0 */
+}
+
+/* Elementele din listă (dreapta implicit) */
+.footer-right-card li {
+  margin:6px 0;                    /* spațiu vertical de 6px între linkuri */
+}
+
+/* Logo SAL */
+.legal-links img {
+  height:50px;                     /* înălțime fixă */
+  width:auto;                     /* <-- adaugă asta ca să păstreze proporțiile */
+  border-radius:6px;               /* colțuri rotunjite */
+  background:#fff;                 /* fundal alb (în caz de PNG transparent) */
+  box-shadow:0 2px 8px rgba(0,0,0,.06); /* umbră subtilă */
+  margin-top:8px;                  /* spațiu mic deasupra */
+}
+
+/* Versiune mobilă */
+@media (max-width:700px){
+  .footer-top{ 
+    grid-template-columns:1fr;     /* coloanele devin rânduri (stivuire) */
+  }
+  .footer-nav, 
+  .footer-contact{ 
+    align-items:flex-start;        /* conținutul aliniat la stânga */
+  }
+}
+
+/* ============================ CUSTOMIZĂRI ============================ */
+
+/* Doar pentru cardul din dreapta (Meniu + Legal) — spațiu mai mare între linkuri */
+.footer-nav .nav-card li {
+  margin:12px 0;        /* spațiu mai mare între elemente */
+  line-height:1.6;      /* rândurile mai aerisite */
+}
+
+/* Imaginea SAL centrată în cardul din dreapta */
+.footer-nav .nav-card .legal-links img {
+  display:block;        /* imaginea ocupă un rând complet */
+  margin:12px auto 0;   /* auto = centrează orizontal, 12px spațiu sus */
+  height:50px;    /* <-- asta e cheia */
+  width:auto;     /* ca să nu se deformeze */
+}
+
+
+
+/* =======================================================================
+   PRICE TABLES
+   Stil pentru tabelele de servicii (2 sau 3 coloane).
+   ======================================================================= */
+.price-table {
+  width:100%;                      /* tabelul ocupă toată lățimea */
+  border-collapse:collapse;        /* celulele împart borderul */
+  margin-top:8px;                  /* spațiu sus */
+  font-size:.95rem;                 /* font puțin mai mic */
+  table-layout:fixed;              /* coloane de lățime fixă */
+}
+.price-table thead th { 
+  background:#f7f9fc;              /* fundal gri foarte deschis pentru header */
+  font-weight:600;                 /* bold */
+}
+.price-table th, .price-table td {
+  padding:8px 10px;                /* spațiu interior celule */
+  border-bottom:1px solid var(--border); /* linii de separare între rânduri */
+  text-align:left;                 /* text aliniat la stânga implicit */
+  overflow-wrap:anywhere;          /* sparge cuvintele prea lungi */
+  word-break:break-word;           /* la nevoie, rupe cuvintele */
+}
+/* thead: nu rupe cuvintele în mijloc (ex: eutanasiere) */
+.price-table thead th {
+  overflow-wrap: normal !important;
+  word-break: keep-all !important;
+  hyphens: none;
+  white-space: normal;
+}
+
+/* 2 coloane */
+.price-table-2col th:first-child, 
+.price-table-2col td:first-child { 
+  width:65%;                       /* prima coloană mai lată */
+  text-align:left;                  /* text la stânga */
+}
+.price-table-2col th:nth-child(2), 
+.price-table-2col td:nth-child(2) { 
+  width:35%;                       /* a doua coloană mai îngustă */
+  text-align:right;                 /* text la dreapta */
+}
+/* 3 coloane */
+.price-table-3col th:first-child, 
+.price-table-3col td:first-child { 
+  width:30%;                       /* prima coloană 30% */
+  text-align:left;                  /* text la stânga */
+}
+.price-table-3col th:nth-child(2), 
+.price-table-3col td:nth-child(2),
+.price-table-3col th:nth-child(3), 
+.price-table-3col td:nth-child(3) {
+  width:35%;                       /* a doua și a treia câte 35% */
+  text-align:right;                 /* text la dreapta */
+}
+/* Centrează doar titlurile din coloanele numerice */
+.price-table-2col thead th:nth-child(2) {
+  text-align: center;
+}
+.price-table-3col thead th:nth-child(2),
+.price-table-3col thead th:nth-child(3) {
+  text-align: center;
+}
+
+@media (max-width:820px){
+  .price-table-2col th:first-child, 
+  .price-table-2col td:first-child { width:60%; } /* mai strâns pe mobil */
+  .price-table-2col th:nth-child(2), 
+  .price-table-2col td:nth-child(2) { width:40%; }
+}
+
+/* =======================================================================
+   EXTRAS: notițe, breadcrumb, butoane
+   ======================================================================= */
+.card-notes { 
+  margin-top:8px;                   /* spațiu sus */
+  padding-left:18px;                /* indentare pentru bullets */
+  font-size:.85rem;                  /* font mai mic */
+  font-style:italic;                /* text italic */
+  color:var(--muted);               /* gri */
+  list-style:disc;                  /* buline tip disc */
+}
+.card-notes li{ margin:2px 0; }      /* spațiu între bullets */
+.breadcrumb { 
+  font-size:.9rem;                  /* dimensiune mică */
+  color:var(--muted);               /* gri */
+  margin-bottom:10px;               /* spațiu dedesubt */
+}
+.breadcrumb a{ color:var(--accent); } /* linkurile albastre */
+.breadcrumb .sep{ margin:0 6px; }     /* spațiu pentru separator */
+.section-header { 
+  display:flex;                     /* titlu + buton pe linie */
+  align-items:center;               /* centrate pe verticală */
+  justify-content:space-between;    /* titlu la stânga, buton la dreapta */
+  gap:12px;                         /* spațiu între ele */
+  margin-bottom:10px;               /* spațiu dedesubt */
+}
+
+@media (max-width: 480px) {
+  .section-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .section-header .btn,
+  .section-header .cta {
+    width: 100%;
+    white-space: normal;    /* lasă textul pe 2 rânduri când e cazul */
+    text-align: center;
+  }
+}
+
+.section-header h3{ margin:0; }      /* fără spațiu suplimentar */
+.btn {
+  display:inline-block;              /* buton inline-block */
+  padding:10px 16px;                 /* spațiu interior */
+  border-radius:10px;                /* colțuri rotunjite */
+  border:1px solid var(--border);    /* contur subțire */
+  background:#fff;                   /* fundal alb */
+  color:var(--accent);               /* text albastru */
+  font-weight:600;                   /* bold */
+  text-decoration:none;              /* fără subliniere */
+  box-shadow:0 4px 16px rgba(0,0,0,.05); /* umbră subtilă */
+}
+.btn:hover{ transform:translateY(-1px); } /* la hover se ridică 1px */
+
+/* =======================================================================
+   RESPONSIVE NAV
+   Reguli speciale pentru mobil (<820px) și desktop (>=821px).
+   ======================================================================= */
+/* ======== Mobil (<=820px) ======== */
+@media (max-width:820px){
+  /* Buton hamburger vizibil pe mobil */
+  .menu-toggle {
+    display:inline-flex !important;
+    align-items:center;
+    justify-content:center;
+    margin-left:auto;
+    background:transparent;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:6px 10px;
+    font-size:22px;
+    cursor:pointer;
+  }
+
+  /* Meniu ascuns implicit */
+  #mainNav {
+    display:none !important; 
+    position:fixed; 
+    top:56px; left:0; right:0; 
+    z-index:1000;
+    background:#fff; 
+    border-bottom:1px solid var(--border);
+    flex-direction:column; 
+    gap:12px; 
+    padding:12px 16px;
+  }
+
+  /* Când are clasa .open -> se afișează */
+  #mainNav.open { display:flex !important; }
+
+  nav a{ padding:8px 0; font-size:16px; }
+}
+
+/* ======== Desktop (>=821px) ======== */
+@media (min-width:821px){
+  .menu-toggle { display:none !important; }  /* hamburger ascuns pe desktop */
+  
+  #mainNav { 
+    display:flex !important; 
+    position:static !important; 
+    flex-direction:row; 
+    gap:16px; 
+    padding:0; 
+    background:transparent; 
+    border:0; 
+  }
+}
+
+
+/* =======================================================================
+   SERVICES PAGE SPECIFIC
+   Layout diferit: o singură coloană pentru carduri.
+   ======================================================================= */
+.services-page .container { max-width:1000px !important; } /* lățime fixă ca homepage */
+.services-page .grid { grid-template-columns:1fr !important; gap:16px; } /* doar o coloană */
+.services-page .card { max-width:100%; } /* cardurile ocupă toată lățimea */
+
+/* =======================================================================
+   PRINT
+   Simplifică layoutul pentru printare.
+   ======================================================================= */
+@media print{
+  header,footer,.hero{ display:none !important; } /* ascunde header/footer/hero */
+  .section{ padding:0; }                         /* scoate paddingul */
+  .grid{ grid-template-columns:1fr!important; gap:8px; } /* un singur card pe rând */
+  .card{ box-shadow:none; border:1px solid #ccc; } /* fără umbre */
+  .price-table th,.price-table td{ border-color:#ccc; } /* borduri gri */
+  .breadcrumb{ margin-bottom:6px; } /* spațiu mic */
+}
+
+/* =======================================================================
+   LOGO FIX
+   Ajustează dimensiunea și alinierea logo-ului.
+   ======================================================================= */
+.site-header .site-logo {
+  width:36px !important;             /* fix 36px lățime */
+  height:auto !important;            /* păstrează proporțiile */
+  max-width:none !important;         /* dezactivează max-width global */
+  display:inline-block !important;   /* se comportă ca inline-block */
+  vertical-align:middle !important;  /* aliniere pe verticală */
+  background:#fff;                   /* fundal alb */
+  border-radius:8px;                 /* colțuri rotunjite */
+  padding:2px;                       /* spațiu între logo și margine */
+}
+.brand-wrapper { 
+  display:flex !important;           /* afișează logo + text pe linie */
+  align-items:center !important;     /* aliniere verticală */
+  gap:8px !important;                /* spațiu între logo și text */
+}
+.brand-wrapper h1 { 
+  margin:0 !important;               /* elimină marginile implicite */
+  line-height:1 !important;          /* text compact */
+  font-size:28px;                    /* dimensiune titlu */
+}
+.logo-box {
+  background:#fff;                   /* fundal alb */
+  border-radius:8px;                 /* colțuri rotunjite */
+  padding:4px;                       /* spațiu interior */
+  display:inline-flex;               /* flex container mic */
+  align-items:center;                /* centru pe verticală */
+  justify-content:center;            /* centru pe orizontală */
+}
+.articole-page h1 {
+  margin: 32px 0 16px;
+  font-size: 2rem;
+}
+
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 16px;
+}
+
+.card-content h2 {
+  font-size: 1.25rem;
+  margin-bottom: 8px;
+}
+
+.card-content p {
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.card-content .btn {
+  background: var(--accent);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  display: inline-block;
+}
+.card-content .btn:hover {
+  background: #0284c7;
+}
+.article-date {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.articol-page h2 {
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+
+.articol-page .article-date {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+.articol-page img {
+  margin: 24px 0;
+  max-width: 100%;
+  border-radius: 12px;
+}
+/* Stiluri pentru articole */
+.articol-page article {
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.7;
+  color: #0f172a; /* aceeasi culoare ca restul site-ului */
+}
+
+.articol-page h2, 
+.articol-page h3, 
+.articol-page h4 {
+  font-family: Poppins, Inter, sans-serif;
+  font-weight: 600;
+  margin: 24px 0 12px;
+  color: #0f172a;
+}
+
+.articol-page p {
+  margin-bottom: 16px;
+  font-weight: 400; /* asigură că nu e bold */
+}
+
+.articol-page strong {
+  font-weight: 600; /* bold doar unde trebuie */
+  color: #0f172a;
+}
+#articles .card img {
+  max-width: 300px;   /* lățimea maximă pe care o vrei */
+  height: auto;       /* păstrează proporțiile */
+  display: block;     /* ca să poți centra mai ușor */
+  margin: 0 auto;     /* centrează imaginea */
+  border-radius: 12px;/* păstrează colțurile rotunjite */
+}
+
+/* Desktop */
+@media (min-width:821px) {
+  #mainNav {
+    display: flex !important;
+    position: static !important;
+    gap: 16px;
+  }
+  .menu-toggle {
+    display: none !important;
+  }
+}
+
+/* Mobil */
+@media (max-width:820px) {
+  .menu-toggle {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    background: transparent;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 6px 10px;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  #mainNav {
+    display: none !important;
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 16px;
+  }
+  #mainNav.open {
+    display: flex !important;
+  }
+  .grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px;
+  }
+}
+.cta-btn-img {
+  max-width: 260px;
+  height: auto;
+  border-radius: 20px;
+}

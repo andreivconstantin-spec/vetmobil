@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Articole – VetMobil</title>
+  <meta name="description" content="Articole utile despre îngrijirea câinilor și pisicilor, sfaturi practice și informații veterinare.">
+  <link rel="stylesheet" href="style.v11.css" />
+</head>
+<body class="articole-page">
+
+  <!-- HEADER (dinamic sau copiat ca pe celelalte pagini) -->
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="logo">VetMobil</a>
+      <nav id="mainNav">
+        <a href="index.html">Acasă</a>
+        <a href="servicii.html">Servicii</a>
+        <a href="contact.html">Contact</a>
+        <a href="faq.html">FAQ</a>
+        <a href="articole.html" class="active">Articole</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONȚINUT -->
+  <main class="container">
+    <h1>Articole și Sfaturi</h1>
+    <p>Bine ai venit pe blogul VetMobil! Aici găsești articole și informații utile despre sănătatea și îngrijirea animalelor de companie.</p>
+    
+    <div class="articles-grid">
+      <!-- ARTICOL 1 -->
+      <article class="card">
+        <img src="images/articol1.jpg" alt="Cum să îți hrănești pisica corect">
+        <div class="card-content">
+          <h2><a href="articol-hrana-pisici.html">Cum să îți hrănești corect pisica</a></h2>
+          <p>Descoperă echilibrul între hrană uscată și hrană umedă pentru pisica ta.</p>
+          <a href="articol-hrana-pisici.html" class="btn">Citește mai mult</a>
+        </div>
+      </article>
+
+      <!-- ARTICOL 2 -->
+      <article class="card">
+        <img src="images/articol2.jpg" alt="Sfaturi pentru plimbarea câinelui">
+        <div class="card-content">
+          <h2><a href="articol-plimbare-caini.html">Sfaturi pentru plimbarea câinelui</a></h2>
+          <p>Cum să faci plimbările zilnice mai sigure și mai plăcute.</p>
+          <a href="articol-plimbare-caini.html" class="btn">Citește mai mult</a>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; <span id="year"></span> VetMobil. Toate drepturile rezervate.</p>
+    </div>
+  </footer>
+
+  <script>
+    // actualizează automat anul
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+assets/uploads/
+data/articles/
+.DS_Store
+node_modules/
+.env
+*.log

@@ -1,0 +1,20 @@
+# Forțare HTTPS
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Elimină www (păstrăm doar vetmobil.ro)
+RewriteCond %{HTTP_HOST} ^www\.vetmobil\.ro [NC]
+RewriteRule ^(.*)$ https://vetmobil.ro/$1 [L,R=301]
+
+# Setează index.html ca pagină implicită
+DirectoryIndex index.html
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+</IfModule>

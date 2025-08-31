@@ -1,0 +1,25 @@
+{
+  "articles": [
+    {
+      "title": "Cum să îți hrănești corect pisica",
+      "description": "Echilibrul între hrană uscată și umedă este cheia unei vieți sănătoase pentru pisica ta.",
+      "image": "assets/articles/hrana-pisici.jpg",
+      "link": "articol-hrana-pisici.html",
+      "date": "2025-08-20"
+    },
+    {
+      "title": "Sfaturi pentru plimbarea câinelui",
+      "description": "Cum să faci plimbările zilnice mai sigure și mai plăcute pentru tine și câinele tău.",
+      "image": "assets/articles/plimbare-caine.jpg",
+      "link": "articol-plimbare-caini.html",
+      "date": "2025-08-18"
+    },
+    {
+      "title": "Vaccinările esențiale pentru câini și pisici",
+      "description": "Protejează-ți animalul de boli grave respectând schema de vaccinare recomandată.",
+      "image": "assets/articles/vaccinari.jpg",
+      "link": "articol-vaccinari.html",
+      "date": "2025-08-15"
+    }
+  ]
+}

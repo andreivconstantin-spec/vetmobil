@@ -1,0 +1,148 @@
+{
+  "site": {
+    "brand": "VetMobil",
+    "phone": "+40 748 650 942",
+    "whatsapp": "40748650942",
+    "email": "programari@vetmobil.ro",
+    "hours": "Luni–Duminică, 09:00–21:00",
+    "coverage": "București & Ilfov",
+    "payments": "Cash, card, transfer"
+  },
+  "services": [
+      {
+  "name": "Deplasare",
+  "description": "Costul deplasării*",
+  "columns": ["Zonă & interval", "Tarif"],
+  "options": [
+    { "name": "București, 09–21 (Luni–Vineri)",                  "price": "200 RON" },
+    { "name": "Ilfov, 09–21 (Luni–Vineri)",                       "price": "250 RON" },
+    { "name": "București, 21–09 (Luni–Vineri)",                   "price": "300 RON" },
+    { "name": "Ilfov, 21–09 (Luni–Vineri)",                       "price": "350 RON" },
+    { "name": "București, 09–21 (Weekend & sărbători legale)",    "price": "300 RON" },
+    { "name": "Ilfov, 09–21 (Weekend & sărbători legale)",        "price": "350 RON" },
+    { "name": "București, 21–09 (Weekend & sărbători legale)",    "price": "400 RON" },
+    { "name": "Ilfov, 21–09 (Weekend & sărbători legale)",        "price": "450 RON" },
+    { "name": "În afara București + Ilfov, 09–21",                "price": "6 RON / km" },
+    { "name": "În afara București + Ilfov, 21–09",                "price": "12 RON / km" }
+  ],
+  "notes": [
+    "* Calculul km se face conform Waze și include dus + întors.",
+    "** Fiecare drum consecutiv deplasării inițiale se taxează cu 100 RON."
+  ],
+  "category": "deplasare"
+},
+    {
+      "name": "Consultație generală",
+      "description": "Examinare, recomandări, plan.",
+      "options": [
+        { "name": "ORA 09–21 (Luni–Vineri)",                 "price": "100 RON + deplasare" },
+        { "name": "ORA 21–09 (Luni–Vineri)",                 "price": "200 RON + deplasare" },
+        { "name": "ORA 09–21 (Weekend și sărbători legale)", "price": "200 RON + deplasare" },
+        { "name": "ORA 21–09 (Weekend și sărbători legale)", "price": "300 RON + deplasare" }
+      ],
+      "category": "consultatie"
+    },
+    {
+      "name": "Vaccinare câine/pisică",
+      "description": "Schema în funcție de vârstă.",
+      "columns": ["Vaccin", "Preț"],
+      "options": [
+    { "name": "Vaccin polivalent",  "price": "100 RON + deplasare" },
+    { "name": "Vaccin antirabic",   "price": "50 RON + deplasare" },
+    { "name": "Vaccin tuse de canisă", "price": "100 RON + deplasare" },
+    { "name": "Vaccin Microsporum",    "price": "70 RON + deplasare" }
+  ],
+  "category": "vaccinare"
+},
+{
+  "name": "Administrativ / Documente",
+  "description": "Acte și identificare (carnet, pașaport, microcip, RECS).",
+  "columns": ["Serviciu", "Preț"],
+  "options": [
+    { "name": "Carnet de sănătate cu serie",                 "price": "50 RON + deplasare" },
+    { "name": "Pașaport",                                     "price": "100 RON + deplasare" },
+    { "name": "Microcipare",                                  "price": "100 RON + deplasare" },
+    { "name": "Viză pașaport",                                "price": "100 RON + deplasare" },
+    { "name": "Înregistrare / modificare / transfer RECS",    "price": "50 RON + deplasare" }
+  ],
+  "category": "administrativ"
+},
+    {
+  "name": "Servicii medicale",
+  "description": "Proceduri medicale la domiciliu.",
+  "columns": ["Serviciu", "Preț"],
+  "options": [
+    { "name": "Tratament simptomatic",                   "price": "100 - 300 RON + deplasare" },
+    { "name": "Administrare (PO/SC/IM/TOP)",             "price": "10 RON       + deplasare" },
+    { "name": "Administrare IV",                         "price": "50 - 150 RON + deplasare" },
+    { "name": "Perfuzie",                                "price": "150 - 450 RON + deplasare" }, 
+    { "name": "Administrare intrarectală",               "price": "30 RON       + deplasare" },
+    { "name": "Clismă",                                  "price": "100 RON      + deplasare" },
+    { "name": "Anestezie locală",                        "price": "150 RON      + deplasare" },
+    { "name": "Montare branulă",                         "price": "50 RON       + deplasare" },
+    { "name": "Inducere vomă",                           "price": "100 - 300 RON + deplasare" },
+    { "name": "Sedare pisică",                           "price": "100 - 200 RON + deplasare" },
+    { "name": "Sedare câine",                            "price": "100 - 400 RON + deplasare" },
+    { "name": "Scos fire",                               "price": "50 RON       + deplasare" },
+    { "name": "Sondaj uretral (fără anestezie)",         "price": "100 - 300 RON + deplasare" },
+    { "name": "Sutură plagă (fără anestezie)",           "price": "100 - 500 RON + deplasare" },
+    { "name": "Puncție lichid ascitic",                  "price": "200 - 400 RON + deplasare" },
+    { "name": "Tăiat unghii",                            "price": "50 RON       + deplasare" },
+    { "name": "Toaletă urechi",                          "price": "50 RON       + deplasare" },
+    { "name": "Toaletă plagă",                           "price": "50 - 300 RON + deplasare" },
+    { "name": "Vidare glande",                           "price": "50 RON       + deplasare" },
+    { "name": "Rețetă regim normal",                     "price": "50 RON       + deplasare" },
+    { "name": "Rețetă regim special",                    "price": "100 RON      + deplasare" },
+    { "name": "Internare",                               "price": "150 - 300 RON + deplasare" }
+  ],
+  "category": "medicale"
+},
+{
+  "name": "Investigatii",
+  "description": "Acasa cand se poate, la clinica cand este nevoie",
+  "columns": ["Investigatie", "Pret"],
+  "options": [
+    { "name": "Analize preoperatorii", "price": "150 RON + deplasare" },
+    { "name": "Biochimie de sange", "price": "200 RON + deplasare" },
+    { "name": "Hemoleucograma", "price": "120 RON + deplasare" },
+    { "name": "Electroliti", "price": "150 RON + deplasare" },
+    { "name": "Analize speciale (proBNP, fPL, cPL, T4, SDMA, TNI)", "price": "150 RON + deplasare" },
+    { "name": "PCR", "price": "450 RON + deplasare" },
+    { "name": "Teste rapide", "price": "150 RON + deplasare" },
+    { "name": "Test Schirmer/Floresceina", "price": "50 RON + deplasare" },
+    { "name": "Examen bacteriologic + micologic", "price": "300 RON + deplasare" },
+    { "name": "Examen citologic", "price": "200 RON + deplasare" },
+    { "name": "Examen histopatologic", "price": "300 - 500 RON + deplasare" },
+    { "name": "Examen microscopic", "price": "150 RON + deplasare" },
+    { "name": "Examen coproparazitologic", "price": "150 RON + deplasare" },
+    { "name": "Sumar + sediment urinar", "price": "100 RON + deplasare" },
+    { "name": "Coprocultura", "price": "200 - 400 RON + deplasare" },
+    { "name": "Urocultura", "price": "200 - 400 RON + deplasare" },
+    { "name": "Ecografie AFAST/TFAST", "price": "100 RON + deplasare" },
+    { "name": "Ecografie de specialitate", "price": "250 RON + deplasare" },
+    { "name": "RX - prima expunere", "price": "150 RON + deplasare" },
+    { "name": "RX - urmatoarele expuneri/buc", "price": "50 RON + deplasare" }
+  ],
+  "category": "investigatii"
+},
+    {
+      "name": "Eutanasiere & Incinerare",
+      "description": "Servicii în funcție de greutatea animalului.",
+      "options": [
+        { "weight": "< 2.5 kg",  "euthanasia": "150 RON", "incineration": "150 RON" },
+        { "weight": "2.5–5 kg",  "euthanasia": "200 RON", "incineration": "225 RON" },
+        { "weight": "5–10 kg",   "euthanasia": "250 RON", "incineration": "300 RON" },
+        { "weight": "10–20 kg",  "euthanasia": "300 RON", "incineration": "425 RON" },
+        { "weight": "20–30 kg",  "euthanasia": "350 RON", "incineration": "525 RON" },
+        { "weight": "30–40 kg",  "euthanasia": "425 RON", "incineration": "675 RON" },
+        { "weight": "40–50 kg",  "euthanasia": "475 RON", "incineration": "775 RON" },
+        { "weight": "> 50 kg",   "euthanasia": "575 RON", "incineration": "20 RON / kg" }
+      ],
+      "notes": [
+    "* În cazul incinerării colective, procesul nu permite returnarea cenușii.",
+    "** Pentru incinerarea individuală, colaborăm cu Raiul Animalelor. Costurile sunt cele afișate pe site-ul lor, la care se adaugă o taxă de 200 RON ce acoperă transportul animalului și aducerea urnei cu cenușa direct la dumneavoastră."
+  ],
+      "category": "eutanasie"
+    }
+  ]
+}
