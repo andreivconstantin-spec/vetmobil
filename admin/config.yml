@@ -1,9 +1,13 @@
 backend:
-  name: test-repo
-  url: https://vetmobil.ro/cms-api/articles.php
+  name: github
+  repo: andreivconstantin-spec/vetmobil   # <- repo-ul tău
+  branch: develop                         # sau main dacă vrei direct live
+  base_url: https://vetmobil-oauth.vercel.app
+  auth_endpoint: /auth                    # opțional (implicit /auth la GitHub)
 
 media_folder: "assets/uploads"
 public_folder: "/assets/uploads"
+
 
 local_backend: true
 
