@@ -1,0 +1,39 @@
+/* Uniformizează imaginile din cardurile de pe pagina de articole */
+#articles, .articles, .articles-grid { /* container fallback - oricare ai în pagină */
+}
+
+/* imaginea din card */
+#articles .card img,
+.articles .card img,
+.articles-grid .card img,
+#articles-list .card img,
+.article-card img {
+  display: block;
+  width: 100%;
+  height: 360px;          /* ajustează 320–380 după gust */
+  object-fit: cover;      /* decupează elegant, nu deformează */
+  object-position: center;
+  border-radius: 12px;    /* opțional, dacă vrei colțuri rotunjite */
+}
+
+/* elimină limite vechi care ar putea strica layout-ul */
+#articles .card img,
+.articles .card img,
+.articles-grid .card img,
+#articles-list .card img {
+  max-height: none !important;
+}
+/* --- CARD SIZE & IMAGE CROP UNIFORM --- */
+.cards-grid .card {
+  width: 100%;
+  max-width: 420px;      /* NU mai lasă cardul să se lățească când e singur */
+  margin: 0 auto;        /* centrează cardul când e 1 pe rând */
+}
+
+.cards-grid .card img {
+  display: block;
+  width: 100%;
+  height: 360px;         /* ajustează 320–380 după gust */
+  object-fit: cover;     /* decupează fără deformare */
+  object-position: center;
+}
