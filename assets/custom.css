@@ -30,10 +30,14 @@
   margin: 0 auto;        /* centrează cardul când e 1 pe rând */
 }
 
+/* imaginea din card: micșorează, nu taia */
 .cards-grid .card img {
   display: block;
   width: 100%;
-  height: 360px;         /* ajustează 320–380 după gust */
-  object-fit: cover;     /* decupează fără deformare */
+  height: 360px;          /* păstrează aceeași înălțime a cadrului */
+  object-fit: contain;    /* <<< asta e cheia: micșorează fără crop */
   object-position: center;
+  background: #f5f6f7;    /* „scrisoare” discretă unde rămâne spațiu liber */
+  border-radius: 12px;    /* dacă ai colțuri rotunde pe card */
 }
+
