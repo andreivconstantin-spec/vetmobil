@@ -1,6 +1,10 @@
+# nu urmări uploadurile din admin
 assets/uploads/
+
+# nu urmări articolele generate pe server
 data/articles/
-.DS_Store
-node_modules/
-.env
-*.log
+data/articles.json
+data/articles/index.json
+
+# fișierul de stare al acțiunii FTP
+.ftp-deploy-sync-state.json

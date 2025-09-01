@@ -6,29 +6,171 @@
   <title>Admin — VetMobil</title>
 </head>
 <body>
-  <!-- Încarcă Decap/Netlify CMS -->
+  <!-- Decap CMS -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 
-  <!-- Script custom care trimite articolele spre backend-ul PHP -->
+  <!-- UI admin -->
+  <button id="rebuildIndexBtn">🔄 Rebuild articole</button>
+  <p id="rebuildStatus" style="font:14px/1.4 sans-serif;"></p>
+
+  <hr/>
+  <h2>Manager articole (live)</h2>
+
+  <button id="reloadListBtn">↻ Reîncarcă lista</button>
+  <p id="listStatus" style="font:14px/1.4 sans-serif; margin:8px 0;"></p>
+
+  <table id="articlesTable" border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse; font:14px/1.4 sans-serif; width:100%; max-width:900px;">
+    <thead>
+      <tr>
+        <th style="text-align:left;">Titlu</th>
+        <th style="text-align:left;">Slug</th>
+        <th style="text-align:left;">Fișier</th>
+        <th>Acțiuni</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
   <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const API_BASE = 'https://vetmobil.ro/cms-api';
+
+    // 1) Salvare prin Decap -> PHP + rebuild
     CMS.registerEventListener({
       name: 'postSave',
-      handler: ({ entry }) => {
-        // Datele articolului
-        const data = entry.get('data').toJS();
-        data.slug = entry.get('slug'); // numele fișierului JSON
+      handler: async ({ entry }) => {
+        try {
+          const data = entry.get('data').toJS();
+          data.slug = entry.get('slug');
 
-        // Trimite articolul la backend-ul nostru PHP
-        fetch('/cms-api/articles.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        })
-        .then(res => res.json())
-        .then(r => console.log('✅ Articol salvat pe server:', r))
-        .catch(err => console.error('❌ Eroare la salvare:', err));
+          const saveRes = await fetch(`${API_BASE}/articles.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+          const saveJson = await saveRes.json();
+          console.log('✅ Articol salvat pe server:', saveJson);
+
+          await fetch(`${API_BASE}/rebuild-trigger.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: '{}'
+          });
+
+          alert('Articolul a fost salvat. Dacă nu apare imediat pe site, apasă „Rebuild articole”.');
+        } catch (err) {
+          console.error('❌ Eroare la salvare:', err);
+          alert('Eroare la salvare. Vezi consola (F12) → Console.');
+        }
       }
     });
+
+    // 2) Rebuild buton
+    const rebuildBtn = document.getElementById('rebuildIndexBtn');
+    const rebuildOut = document.getElementById('rebuildStatus');
+    rebuildBtn.addEventListener('click', async () => {
+      rebuildBtn.disabled = true; rebuildOut.textContent = 'Se reconstruiește...';
+      try {
+        const r = await fetch(`${API_BASE}/rebuild-trigger.php`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: '{}'
+        });
+        const data = await r.json();
+        if (data.ok) {
+          rebuildOut.textContent = `Gata. ${data.count ?? '?'} articole indexate.`;
+        } else {
+          rebuildOut.textContent = 'Eroare: ' + (data.error || 'necunoscută');
+        }
+      } catch (e) {
+        rebuildOut.textContent = 'Eroare de rețea: ' + e.message;
+      } finally {
+        rebuildBtn.disabled = false;
+      }
+    });
+
+    // 3) Manager articole (listare + ștergere)
+    const listBtn  = document.getElementById('reloadListBtn');
+    const listOut  = document.getElementById('listStatus');
+    const tbody    = document.querySelector('#articlesTable tbody');
+
+    function escapeHtml(s) {
+      return (s || '').replace(/[&<>"']/g, c => (
+        { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]
+      ));
+    }
+
+    async function loadArticles() {
+      listOut.textContent = 'Se încarcă...';
+      tbody.innerHTML = '';
+      try {
+        const r = await fetch(`${API_BASE}/articles.php`, {
+          method: 'GET',
+          mode: 'cors',
+          cache: 'no-store',
+          headers: { 'Accept': 'application/json' }
+        });
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        const data = await r.json();
+        if (!data || !Array.isArray(data.items)) {
+          listOut.textContent = 'Nu am putut încărca lista (format necunoscut).';
+          return;
+        }
+        listOut.textContent = `Gata. ${data.count ?? data.items.length} articole.`;
+
+        for (const item of data.items) {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${escapeHtml(item.title || '')}</td>
+            <td>${escapeHtml(item.slug || '')}</td>
+            <td>${escapeHtml(item.file || '')}</td>
+            <td>${item.slug ? `<button class="del" data-slug="${escapeHtml(item.slug)}">Șterge</button>` : '<em>(fără slug)</em>'}</td>
+          `;
+          tbody.appendChild(tr);
+        }
+
+        tbody.querySelectorAll('button.del').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            const slug = btn.getAttribute('data-slug');
+            if (!slug) return;
+            if (!confirm(`Ștergi articolul: ${slug}?`)) return;
+            btn.disabled = true; btn.textContent = '...';
+            try {
+              const delRes = await fetch(`${API_BASE}/articles.php`, {
+                method: 'POST',
+                mode: 'cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'delete', slug })
+              });
+              const delJson = await delRes.json();
+              if (delJson.status === 'deleted') {
+                await fetch(`${API_BASE}/rebuild-trigger.php`, {
+                  method: 'POST',
+                  mode: 'cors',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: '{}'
+                });
+                await loadArticles();
+              } else {
+                alert('Eroare la ștergere: ' + (delJson.error || 'necunoscută'));
+              }
+            } catch (e) {
+              alert('Eroare rețea la ștergere: ' + e.message);
+            } finally {
+              btn.disabled = false; btn.textContent = 'Șterge';
+            }
+          });
+        });
+
+      } catch (e) {
+        console.error(e);
+        listOut.textContent = 'Eroare rețea: ' + e.message;
+      }
+    }
+
+    listBtn.addEventListener('click', loadArticles);
+    loadArticles(); // încarcă automat
+  });
   </script>
 </body>
 </html>
