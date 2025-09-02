@@ -40,4 +40,10 @@
   background: #f5f6f7;    /* „scrisoare” discretă unde rămâne spațiu liber */
   border-radius: 12px;    /* dacă ai colțuri rotunde pe card */
 }
-
+/* === override final pentru imaginile din cardurile de pe pagina Articole === */
+#articles.cards-grid .card img {
+  object-fit: contain !important;  /* nu mai cropează */
+  object-position: center !important;
+  height: 360px !important;        /* păstrăm aceeași înălțime a cadrului */
+  background: #f5f6f7;             /* “scrisoare” discretă unde rămâne spațiu liber */
+}
