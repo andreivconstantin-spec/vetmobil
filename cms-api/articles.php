@@ -68,26 +68,39 @@ switch ($method) {
   case 'POST':
   case 'PUT': {
     // ---- UPLOAD imagine (multipart/form-data) ----
-    if (!empty($_FILES)) {
-      $file = $_FILES['file'] ?? null;
-      if ($file && $file['error'] === UPLOAD_ERR_OK) {
-        $orig  = basename($file['name']);
-        $safe  = preg_replace('/[^\w\-.]+/u', '_', $orig);
-        $name  = time() . '-' . $safe;
-        $target = $uploadsDir . $name;
-        if (move_uploaded_file($file['tmp_name'], $target)) {
-          // răspuns = path public absolut
-          echo json_encode('/assets/uploads/' . $name, JSON_UNESCAPED_SLASHES);
+    // === UPLOAD FILE (multipart) ===
+      if (!empty($_FILES)) {
+        $file = $_FILES['file'] ?? null;
+        if ($file && $file['error'] === UPLOAD_ERR_OK) {
+          $orig = basename($file['name']);
+          // curăță numele, dar păstrează baza
+          $safe = preg_replace('/[^\w\-.]+/u', '_', $orig);
+          $safe = preg_replace('/_{2,}/', '_', $safe);
+          $base = pathinfo($safe, PATHINFO_FILENAME);
+          $ext  = strtolower(pathinfo($safe, PATHINFO_EXTENSION));
+
+          // păstrează numele original; dacă e deja folosit, adaugă -2, -3, ...
+          $name = $base . ($ext ? ".$ext" : "");
+          $i = 2;
+          while (file_exists($uploadDir . $name)) {
+            $name = $base . '-' . $i++ . ($ext ? ".$ext" : "");
+          }
+
+          $target = $uploadDir . $name;
+          if (move_uploaded_file($file['tmp_name'], $target)) {
+            @chmod($target, 0644);
+            echo json_encode("/assets/uploads/" . $name, JSON_UNESCAPED_SLASHES);
+          } else {
+            http_response_code(500);
+            echo json_encode(["error" => "Eroare la salvarea fișierului"]);
+          }
         } else {
-          http_response_code(500);
-          echo json_encode(['error'=>'Eroare la salvarea fișierului']);
+          http_response_code(400);
+          echo json_encode(["error" => "Fișier lipsă sau invalid"]);
         }
-      } else {
-        http_response_code(400);
-        echo json_encode(['error'=>'Fișier lipsă sau invalid']);
+        exit;
       }
-      exit;
-    }
+
 
     // ---- Citește body (JSON sau form) ----
     $raw   = file_get_contents('php://input') ?: '';

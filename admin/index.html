@@ -189,56 +189,97 @@
   <input id="quick-file" type="file" accept="image/*">
 </div>
 <script>
-(function() {
-  const API = 'https://vetmobil.ro/cms-api/articles.php'; // upload endpoint-ul nostru
+(function () {
+  const API = 'https://vetmobil.ro/cms-api/articles.php';
   const box = document.getElementById('quick-uploader');
   const file = document.getElementById('quick-file');
 
-  function sticker(msg, ok=true){
+  let lastInput = null;
+  document.addEventListener('focusin', (e) => {
+    const t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) lastInput = t;
+  });
+
+  function repaint(ok, html) {
     box.style.background = ok ? '#10b981' : '#ef4444';
-    box.innerHTML = (ok ? '✅ ' : '⚠️ ') + msg + '<small>click pentru altă imagine</small><input id="quick-file" type="file" accept="image/*" style="display:none">';
-    // re-leagă inputul
-    const newFile = box.querySelector('#quick-file');
-    newFile.addEventListener('change', onPick);
+    box.innerHTML = (ok ? '✅ ' : '⚠️ ') + html +
+      '<small>click pentru altă imagine</small>' +
+      '<input id="quick-file" type="file" accept="image/*" style="display:none">';
+    box.querySelector('#quick-file').addEventListener('change', onPick);
   }
 
-  async function onPick(e){
+  async function copyToClipboard(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch {}
+      document.body.removeChild(ta);
+      return true;
+    }
+  }
+
+  function tryInsertIntoEditor(url) {
+    // 1) ultimul input focalizat
+    if (lastInput && lastInput.offsetParent) {
+      lastInput.focus();
+      lastInput.value = url;
+      lastInput.dispatchEvent(new Event('input', { bubbles: true }));
+      lastInput.dispatchEvent(new Event('change', { bubbles: true }));
+      return true;
+    }
+    // 2) caută input vizibil care pare a fi cel de imagine
+    const candidates = Array.from(document.querySelectorAll('input[type="text"], input[type="url"]'));
+    const target = candidates.find(el => {
+      if (!el.offsetParent) return false;
+      const hay = ((el.name || '') + ' ' + (el.placeholder || '') + ' ' + (el.id || '')).toLowerCase();
+      return /image|imagin|poz[ăa]/.test(hay);
+    }) || candidates.find(el => el.offsetParent && el.closest('[data-testid*="control"]'));
+    if (target) {
+      target.focus();
+      target.value = url;
+      target.dispatchEvent(new Event('input', { bubbles: true }));
+      target.dispatchEvent(new Event('change', { bubbles: true }));
+      return true;
+    }
+    return false;
+  }
+
+  async function onPick(e) {
     const f = e.target.files && e.target.files[0];
-    if(!f) return;
-    try{
-      box.style.background = '#0ea5e9';
-      box.innerHTML = '⏳ Încarc...' + '<small>te rog așteaptă</small><input id="quick-file" type="file" accept="image/*" style="display:none">';
+    if (!f) return;
+    repaint(true, '⏳ Încarc...');
+
+    try {
       const fd = new FormData();
       fd.append('file', f);
-      const r = await fetch(API, { method:'POST', body:fd, credentials:'omit' });
+      const r = await fetch(API, { method: 'POST', body: fd, credentials: 'omit' });
       const txt = await r.text();
-      // API-ul nostru întoarce UN STRING JSON cu calea publică
-      // ex: "/assets/uploads/1693599999-nume.png"
+
       let url = null;
-      try { url = JSON.parse(txt); } catch(_) {}
+      try { url = JSON.parse(txt); } catch {}
       if (typeof url !== 'string') throw new Error('Răspuns neașteptat: ' + txt);
 
-      // Copiază în clipboard
-      try { await navigator.clipboard.writeText(url); } catch(_) {}
+      await copyToClipboard(url);
+      const inserted = tryInsertIntoEditor(url);
 
-      // Încearcă să bage URL-ul direct în câmpul "Imagine" (controlul de URL)
-      try {
-        // Caută un input text vizibil în cardul controlului de imagine
-        const candidates = Array.from(document.querySelectorAll('input[type="text"], input[type="url"]'));
-        // ia prima care e vizibilă în editor (nu în sidebar)
-        const target = candidates.find(el => el.offsetParent && el.closest('[data-testid="editor-control"]'));
-        if (target) {
-          target.focus();
-          target.value = url;
-          target.dispatchEvent(new Event('input', { bubbles:true }));
-          target.dispatchEvent(new Event('change', { bubbles:true }));
-        }
-      } catch(_) {}
+      repaint(true, inserted
+        ? 'Încărcat! URL inserat în câmp'
+        : 'Încărcat! URL copiat în clipboard');
 
-      sticker('Încărcat! URL în clipboard');
-    } catch(err){
+      if (!inserted) {
+        // ultimul fallback: arată un prompt cu URL-ul, ca să îl poți lipi unde vrei
+        setTimeout(() => { window.prompt('URL imagine (copiat în clipboard):', url); }, 100);
+      }
+    } catch (err) {
       console.error(err);
-      sticker('Eroare la upload', false);
+      repaint(false, 'Eroare la upload');
     }
   }
 
@@ -246,5 +287,6 @@
   file.addEventListener('change', onPick);
 })();
 </script>
+
 </body>
 </html>
