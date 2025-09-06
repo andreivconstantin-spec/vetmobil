@@ -7,9 +7,10 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-FV95L6KXZP');
+  gtag('config', 'AW-17526932481');
 </script>
+<!-- Event snippet for Contact conversion page In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. --> <script> function gtag_report_conversion(url) { var callback = function () { if (typeof(url) != 'undefined') { window.location = url; } }; gtag('event', 'conversion', { 'send_to': 'AW-17526932481/7la2CP3Nq5QbEIGIv6VB', 'event_callback': callback }); return false; } </script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GDPR – Politica de confidențialitate | VetMobil</title>
@@ -197,9 +198,24 @@
       <div class="card contact-card">
         <div class="footer-contact">
           <h3>Contact</h3>
-          <p><strong>Telefon:</strong> <a id="phone" href="tel:+40748650942">+40 748 650 942</a></p>
-          <p><strong>WhatsApp:</strong> <a id="whatsapp" href="https://wa.me/0748650942" target="_blank" rel="noopener">Scrie pe WhatsApp</a></p>
-          <p><strong>Email:</strong> <a id="email" href="mailto:programari@vetmobil.ro">programari@vetmobil.ro</a></p>
+          <p><strong>Telefon:</strong>
+            <a id="phone"
+              href="tel:+40748650942"
+              onclick="return gtag_report_conversion(this.href);">+40 748 650 942</a>
+          </p>
+
+          <p><strong>WhatsApp:</strong>
+            <a id="whatsapp"
+              href="https://wa.me/40748650942"
+              target="_blank" rel="noopener"
+              onclick="return gtag_report_conversion(this.href);">Scrie pe WhatsApp</a>
+          </p>
+
+          <p><strong>Email:</strong>
+            <a id="email"
+              href="mailto:programari@vetmobil.ro"
+              onclick="return gtag_report_conversion(this.href);">programari@vetmobil.ro</a>
+          </p>
           <p><strong>Program:</strong> <span id="hours">Luni–Duminică, 09:00–21:00</span></p>
         </div>
 
