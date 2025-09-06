@@ -140,6 +140,10 @@ async function load() {
     btn.className = 'cta small';
     btn.href = "#contact";
     btn.textContent = "Programează o vizită";
+    btn.addEventListener('click', function (e) {
+  if (gtag_report_conversion(this.href) === false) e.preventDefault();
+});
+
 
     descRow.appendChild(desc);
     descRow.appendChild(btn);
