@@ -6,5 +6,10 @@ data/articles/
 data/articles.json
 data/articles/index.json
 
+# NOI: statistici + feedback + abonați (generate pe server)
+data/meta/
+data/feedback/
+data/subscribers/
+
 # fișierul de stare al acțiunii FTP
 .ftp-deploy-sync-state.json

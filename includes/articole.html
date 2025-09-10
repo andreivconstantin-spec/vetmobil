@@ -58,9 +58,112 @@
     </div>
   </footer>
 
-  <script>
-    // actualizează automat anul
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+<script>
+// ==== helper unic: derivăm slug-ul META dintr-un URL sau din pagina curentă ====
+// Regula: scoatem slash-urile de la capete, înlocuim "/" cu "_", păstrăm .html dacă există
+function metaSlugFromUrl(urlOrPath){
+  let p;
+  try {
+    const u = new URL(urlOrPath || location.pathname, location.origin);
+    p = u.pathname;
+  } catch {
+    p = String(urlOrPath || location.pathname);
+  }
+  p = p.replace(/^\/+|\/+$/g, '');      // fără "/" la capete
+  if (!p) p = 'home';
+  return p.replace(/[\/\\]/g, '_');     // "/" -> "_"
+}
+
+// ID client simplu (pentru limitare voturi/vizite)
+function getClientId(){
+  const k='vm_client_id';
+  let id=localStorage.getItem(k);
+  if(!id){
+    id=(crypto.randomUUID?crypto.randomUUID():(Date.now()+"-"+Math.random()));
+    localStorage.setItem(k,id);
+  }
+  return id;
+}
+
+// 1) Identificăm toate cardurile existente în grilă
+const cards = Array.from(document.querySelectorAll('.articles-grid .card'));
+if(cards.length){
+  // 2) Pentru fiecare card: setăm data-slug din linkul cardului și injectăm UI-ul meta dacă lipsește
+  cards.forEach(card=>{
+    // determinăm linkul principal al cardului (titlu sau buton "Citește mai mult")
+    const linkEl = card.querySelector('a[href]');
+    if(!linkEl) return;
+
+    // slugul meta
+    const slug = metaSlugFromUrl(linkEl.getAttribute('href'));
+    card.dataset.slug = slug;
+
+    // inserează zona de meta dacă nu există
+    if(!card.querySelector('.article-meta')){
+      const meta = document.createElement('div');
+      meta.className = 'article-meta';
+      meta.style.cssText = 'display:flex;gap:12px;align-items:center;margin-top:8px;';
+      meta.innerHTML = `
+        <button class="btn-up" type="button">👍 <span class="up">0</span></button>
+        <button class="btn-down" type="button">👎 <span class="down">0</span></button>
+        <span>·</span>
+        <span class="views"><span class="v">0</span> vizualizări</span>
+      `;
+      card.appendChild(meta);
+    }
+  });
+
+  // 3) Populăm cifrele reale (views/up/down) din backend
+  fetch('/cms-api/meta_list.php', {cache:'no-store'})
+    .then(r=>r.json())
+    .then(list=>{
+      const map = {};
+      (list||[]).forEach(m=> map[m.slug] = m);
+
+      cards.forEach(card=>{
+        const slug = card.dataset.slug;
+        const m = map[slug] || {views:0, up:0, down:0};
+        const upEl   = card.querySelector('.up');
+        const downEl = card.querySelector('.down');
+        const vEl    = card.querySelector('.v');
+        if(upEl)   upEl.textContent   = m.up   ?? 0;
+        if(downEl) downEl.textContent = m.down ?? 0;
+        if(vEl)    vEl.textContent    = m.views?? 0;
+      });
+    })
+    .catch(()=>{ /* dacă nu există meta încă, rămâne 0/0/0 */ });
+
+  // 4) Vot din listă (toggle & protecție se fac în backend)
+  function sendVote(slug, vote){
+    return fetch('/cms-api/vote.php',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ slug, vote, clientId:getClientId() })
+    }).then(r=>r.json());
+  }
+
+  cards.forEach(card=>{
+    const slug = card.dataset.slug;
+    const upBtn   = card.querySelector('.btn-up');
+    const downBtn = card.querySelector('.btn-down');
+    const upEl    = card.querySelector('.up');
+    const downEl  = card.querySelector('.down');
+
+    upBtn && upBtn.addEventListener('click', ()=>{
+      sendVote(slug,'up').then(m=>{
+        if(upEl)   upEl.textContent   = m.up   ?? 0;
+        if(downEl) downEl.textContent = m.down ?? 0;
+      }).catch(()=>{});
+    });
+
+    downBtn && downBtn.addEventListener('click', ()=>{
+      sendVote(slug,'down').then(m=>{
+        if(upEl)   upEl.textContent   = m.up   ?? 0;
+        if(downEl) downEl.textContent = m.down ?? 0;
+      }).catch(()=>{});
+    });
+  });
+}
+</script>
 </body>
 </html>
