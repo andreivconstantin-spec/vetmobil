@@ -431,4 +431,124 @@ function vmTrackViewOncePer12h(slug){
   var slug = vmMetaSlugFromUrl('/' + curPath); // păstrăm .html
   vmTrackViewOncePer12h(slug);
 })();
+// ============== VM: META pe pagina "articole.html" (liste) ==============
+(function(){
+  // Rulează doar pe pagina publică articole.html
+  var isListaArticole = document.body.classList.contains('articole-page');
+  if(!isListaArticole) return;
+
+  // Folosim helperii EXISTENȚI din fișier:
+  // - vmMetaSlugFromUrl(urlOrPath)
+  // - vmGetClientId()
+
+  function vmListSendVote(slug, vote){
+    return fetch('/cms-api/vote.php', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ slug: slug, vote: vote, clientId: vmGetClientId() })
+    }).then(function(r){ return r.json(); });
+  }
+
+  function vmListAttachMetaToCards(){
+    var root = document.getElementById('articles');
+    if(!root) return;
+
+    var cards = Array.from(root.querySelectorAll('.card'));
+    if(!cards.length) return;
+
+    // 1) setăm data-slug + injectăm UI dacă lipsește (o singură dată / card)
+    cards.forEach(function(card){
+      if(card.dataset.vmMetaInit === '1') return;
+
+      // link către articol (la tine e "articol.html?file=...") → păstrăm doar .pathname
+      var linkEl = card.querySelector('h4 a[href], a.cta[href], a[href$=".html"]');
+      if(!linkEl) return;
+      var href = linkEl.getAttribute('href');
+      var url;
+      try { url = new URL(href, location.origin); }
+      catch(e){ url = { pathname: href }; }
+
+      var slug = vmMetaSlugFromUrl(url.pathname); // ignoră query, păstrează .html
+      card.dataset.slug = slug;
+
+      // UI meta (👍 👎 · vizualizări)
+      if(!card.querySelector('.article-meta')){
+        var meta = document.createElement('div');
+        meta.className = 'article-meta';
+        meta.style.cssText = 'display:flex;gap:12px;align-items:center;margin-top:8px;';
+        meta.innerHTML =
+          '<button class="btn-up" type="button">👍 <span class="up">0</span></button>' +
+          '<button class="btn-down" type="button" style="margin-left:8px;">👎 <span class="down">0</span></button>' +
+          '<span style="margin:0 8px;">·</span>' +
+          '<span class="views"><span class="v">0</span> vizualizări</span>';
+        card.appendChild(meta);
+      }
+
+      // Vote handlers (o singură dată)
+      var upBtn   = card.querySelector('.btn-up');
+      var downBtn = card.querySelector('.btn-down');
+      var upEl    = card.querySelector('.up');
+      var downEl  = card.querySelector('.down');
+
+      if(upBtn && !upBtn.dataset.bound){
+        upBtn.dataset.bound = '1';
+        upBtn.addEventListener('click', function(){
+          vmListSendVote(slug, 'up').then(function(m){
+            if(upEl)   upEl.textContent   = m.up   || 0;
+            if(downEl) downEl.textContent = m.down || 0;
+          }).catch(function(){});
+        });
+      }
+      if(downBtn && !downBtn.dataset.bound){
+        downBtn.dataset.bound = '1';
+        downBtn.addEventListener('click', function(){
+          vmListSendVote(slug, 'down').then(function(m){
+            if(upEl)   upEl.textContent   = m.up   || 0;
+            if(downEl) downEl.textContent = m.down || 0;
+          }).catch(function(){});
+        });
+      }
+
+      card.dataset.vmMetaInit = '1';
+    });
+
+    // 2) populăm cifrele din backend
+    fetch('/cms-api/meta_list.php', {cache:'no-store'})
+      .then(function(r){ return r.json(); })
+      .then(function(list){
+        var map = {};
+        (list||[]).forEach(function(m){ map[m.slug] = m; });
+        cards.forEach(function(card){
+          var slug = card.dataset.slug;
+          if(!slug) return;
+          var m = map[slug] || {views:0, up:0, down:0};
+          var upEl   = card.querySelector('.up');
+          var downEl = card.querySelector('.down');
+          var vEl    = card.querySelector('.v');
+          if(upEl)   upEl.textContent   = m.up   || 0;
+          if(downEl) downEl.textContent = m.down || 0;
+          if(vEl)    vEl.textContent    = m.views|| 0;
+        });
+      }).catch(function(){});
+  }
+
+  // Rulăm după ce #articles a fost populat de loadArticles()
+  function vmListInitMeta(){
+    vmListAttachMetaToCards();
+    var root = document.getElementById('articles');
+    if(!root) return;
+
+    // Dacă se adaugă carduri ulterior, reatașăm meta (evităm duplicate cu vmMetaInit)
+    var mo = new MutationObserver(function(){
+      vmListAttachMetaToCards();
+    });
+    mo.observe(root, { childList:true, subtree:true });
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', vmListInitMeta);
+  }else{
+    vmListInitMeta();
+  }
+})();
 
