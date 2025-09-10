@@ -411,34 +411,34 @@ function vmTrackViewOncePer12h(slug){
   });
 }
 
-// La încărcarea paginii: vedem dacă pagina curentă este un ARTICOL
+// La încărcarea paginii: detectăm articolul după existența fișierului JSON în /data/articles
 (function(){
-  // Încarcă lista de articole
-  fetch('/data/articles/index.json', { cache:'no-store' })
-    .then(function(r){ return r.json(); })
-    .then(function(j){
-      var arr = Array.isArray(j && j.articles) ? j.articles : (Array.isArray(j) ? j : []);
-      if(!arr.length) return;
+  try {
+    var curPath = (new URL(location.href)).pathname.replace(/^\/+|\/+$/g,''); // ex: "articol-hrana-pisici.html"
+  } catch(e){
+    var curPath = String(location.pathname || '').replace(/^\/+|\/+$/g,'');
+  }
+  if(!curPath) return; // homepage, nimic de făcut
 
-      var cur = location.pathname;
-      // normalizăm pentru comparație: fără query/hash
-      try { cur = new URL(location.href).pathname; } catch(e){}
-      // Caută articolul din listă care are link == URL curent (ca path)
-      var isArticle = arr.some(function(a){
-        if(!a || !a.link) return false;
-        try {
-          var u = new URL(a.link, location.origin);
-          return u.pathname === cur;
-        } catch(e){
-          // dacă link-ul e relativ simplu
-          return a.link === cur || ("/"+a.link.replace(/^\/+/,'')) === cur;
-        }
-      });
+  // presupunem că articolul are un JSON cu același nume fără .html în /data/articles/
+  var baseName = curPath.replace(/\.html?$/i, ''); // ex: "articol-hrana-pisici"
+  var jsonUrl  = '/data/articles/' + encodeURIComponent(baseName) + '.json';
 
-      if(isArticle){
-        var slug = vmMetaSlugFromUrl(cur);
+  fetch(jsonUrl, { method:'HEAD', cache:'no-store' })
+    .then(function(res){
+      if(!res.ok){
+        // dacă serverul nu acceptă HEAD, încercăm GET
+        return fetch(jsonUrl, { method:'GET', cache:'no-store' });
+      }
+      return res;
+    })
+    .then(function(res){
+      if(res && res.ok){
+        var slug = vmMetaSlugFromUrl('/' + curPath); // păstrăm ".html"
         vmTrackViewOncePer12h(slug);
       }
     })
-    .catch(function(){ /* dacă nu putem citi index.json, nu contorizăm */ });
+    .catch(function(){
+      // dacă nu putem verifica, nu contorizăm
+    });
 })();
