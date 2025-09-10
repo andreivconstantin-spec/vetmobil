@@ -466,9 +466,35 @@ function vmTrackViewOncePer12h(slug){
       var href = linkEl.getAttribute('href');
       var url;
       try { url = new URL(href, location.origin); }
-      catch(e){ url = { pathname: href }; }
+      catch(e){ url = { pathname: href, search: '' }; }
 
-      var slug = vmMetaSlugFromUrl(url.pathname); // ignoră query, păstrează .html
+      // slug unic: dacă linkul are ?file=..., folosim numele fișierului JSON
+      var slug;
+      var fileParam = null;
+
+      // url.searchParams (dacă există)
+      if (url.search && typeof URLSearchParams !== 'undefined') {
+        try {
+          var sp = new URLSearchParams(url.search);
+          fileParam = sp.get('file');
+        } catch(e){}
+      }
+
+      // fallback: parsăm manual query-ul
+      if (!fileParam && typeof href === 'string') {
+        var m = href.match(/[?&]file=([^&#]+)/);
+        if (m) fileParam = decodeURIComponent(m[1]);
+      }
+
+      if (fileParam) {
+        // ex: boala-renala.json -> boala-renala.html -> boala-renala_html (în /data/meta/)
+        var base = fileParam.replace(/\.json$/i,'');
+        slug = vmMetaSlugFromUrl(base + '.html');
+      } else {
+        // fără ?file=..., rămânem la pathname
+        slug = vmMetaSlugFromUrl(url.pathname);
+      }
+
       card.dataset.slug = slug;
 
       // UI meta (👍 👎 · vizualizări)
