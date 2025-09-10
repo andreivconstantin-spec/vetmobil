@@ -411,34 +411,24 @@ function vmTrackViewOncePer12h(slug){
   });
 }
 
-// La încărcarea paginii: detectăm articolul după existența fișierului JSON în /data/articles
+// La încărcarea paginii: considerăm ARTICOL orice .html care nu e pagină de bază
 (function(){
-  try {
-    var curPath = (new URL(location.href)).pathname.replace(/^\/+|\/+$/g,''); // ex: "articol-hrana-pisici.html"
-  } catch(e){
-    var curPath = String(location.pathname || '').replace(/^\/+|\/+$/g,'');
-  }
-  if(!curPath) return; // homepage, nimic de făcut
+  var curPath;
+  try { curPath = (new URL(location.href)).pathname.replace(/^\/+|\/+$/g,''); }
+  catch(e){ curPath = String(location.pathname || '').replace(/^\/+|\/+$/g,''); }
 
-  // presupunem că articolul are un JSON cu același nume fără .html în /data/articles/
-  var baseName = curPath.replace(/\.html?$/i, ''); // ex: "articol-hrana-pisici"
-  var jsonUrl  = '/data/articles/' + encodeURIComponent(baseName) + '.json';
+  if(!curPath) return;                     // ex: homepage
+  if(!/\.html?$/i.test(curPath)) return;   // doar .html/.htm
 
-  fetch(jsonUrl, { method:'HEAD', cache:'no-store' })
-    .then(function(res){
-      if(!res.ok){
-        // dacă serverul nu acceptă HEAD, încercăm GET
-        return fetch(jsonUrl, { method:'GET', cache:'no-store' });
-      }
-      return res;
-    })
-    .then(function(res){
-      if(res && res.ok){
-        var slug = vmMetaSlugFromUrl('/' + curPath); // păstrăm ".html"
-        vmTrackViewOncePer12h(slug);
-      }
-    })
-    .catch(function(){
-      // dacă nu putem verifica, nu contorizăm
-    });
+  // Excludem paginile de bază (completează lista după nevoi)
+  var EXCLUDE = new Set([
+    'index.html', 'articole.html', 'servicii.html',
+    'contact.html', 'faq.html', 'privacy.html', 'terms.html'
+  ]);
+  if (EXCLUDE.has(curPath.toLowerCase())) return;
+
+  // Dacă a trecut de filtre => contorizăm vizita ca ARTICOL
+  var slug = vmMetaSlugFromUrl('/' + curPath); // păstrăm .html
+  vmTrackViewOncePer12h(slug);
 })();
+
