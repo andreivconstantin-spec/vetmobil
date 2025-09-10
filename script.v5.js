@@ -369,3 +369,76 @@ if (article.image) {
   }
 }
 loadSingleArticle();
+// ============== VM: TRACK VIEWS AUTOMAT ==============
+// Regula canonică de slug pentru meta: "/" -> "_" , păstrăm ".html" dacă există
+function vmMetaSlugFromUrl(urlOrPath) {
+  var p;
+  try {
+    var u = new URL(urlOrPath || location.pathname, location.origin);
+    p = u.pathname;
+  } catch (e) {
+    p = String(urlOrPath || location.pathname);
+  }
+  p = p.replace(/^\/+|\/+$/g, ''); // fără / la capete
+  if (!p) p = 'home';
+  return p.replace(/[\/\\]/g, '_'); // "/" -> "_"
+}
+
+// ID client (anti-spam light)
+function vmGetClientId(){
+  var k='vm_client_id';
+  var id=localStorage.getItem(k);
+  if(!id){
+    id=(crypto && crypto.randomUUID ? crypto.randomUUID() : (Date.now()+"-"+Math.random()));
+    localStorage.setItem(k,id);
+  }
+  return id;
+}
+
+// Trimite +1 view (max o dată / 12h)
+function vmTrackViewOncePer12h(slug){
+  var key  = 'vm_view_'+slug;
+  var last = Number(localStorage.getItem(key) || 0);
+  var now  = Date.now();
+  if(now - last <= 12*60*60*1000) return; // în ultimele 12h am contorizat deja
+
+  fetch('/cms-api/track_view.php', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ slug: slug, clientId: vmGetClientId() })
+  }).finally(function(){
+    localStorage.setItem(key, String(now));
+  });
+}
+
+// La încărcarea paginii: vedem dacă pagina curentă este un ARTICOL
+(function(){
+  // Încarcă lista de articole
+  fetch('/data/articles/index.json', { cache:'no-store' })
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      var arr = Array.isArray(j && j.articles) ? j.articles : (Array.isArray(j) ? j : []);
+      if(!arr.length) return;
+
+      var cur = location.pathname;
+      // normalizăm pentru comparație: fără query/hash
+      try { cur = new URL(location.href).pathname; } catch(e){}
+      // Caută articolul din listă care are link == URL curent (ca path)
+      var isArticle = arr.some(function(a){
+        if(!a || !a.link) return false;
+        try {
+          var u = new URL(a.link, location.origin);
+          return u.pathname === cur;
+        } catch(e){
+          // dacă link-ul e relativ simplu
+          return a.link === cur || ("/"+a.link.replace(/^\/+/,'')) === cur;
+        }
+      });
+
+      if(isArticle){
+        var slug = vmMetaSlugFromUrl(cur);
+        vmTrackViewOncePer12h(slug);
+      }
+    })
+    .catch(function(){ /* dacă nu putem citi index.json, nu contorizăm */ });
+})();
