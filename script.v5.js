@@ -411,26 +411,48 @@ function vmTrackViewOncePer12h(slug){
   });
 }
 
-// La încărcarea paginii: considerăm ARTICOL orice .html care nu e pagină de bază
+// La încărcarea paginii: tracking VIEWS cu slug din ?file= (ca în listă)
 (function(){
   var curPath;
   try { curPath = (new URL(location.href)).pathname.replace(/^\/+|\/+$/g,''); }
   catch(e){ curPath = String(location.pathname || '').replace(/^\/+|\/+$/g,''); }
 
-  if(!curPath) return;                     // ex: homepage
+  if(!curPath) return;                     // fără path
   if(!/\.html?$/i.test(curPath)) return;   // doar .html/.htm
 
-  // Excludem paginile de bază (completează lista după nevoi)
+  // Pagini pe care NU vrem tracking
   var EXCLUDE = new Set([
     'index.html', 'articole.html', 'servicii.html',
     'contact.html', 'faq.html', 'privacy.html', 'terms.html'
   ]);
   if (EXCLUDE.has(curPath.toLowerCase())) return;
 
-  // Dacă a trecut de filtre => contorizăm vizita ca ARTICOL
-  var slug = vmMetaSlugFromUrl('/' + curPath); // păstrăm .html
+  var slug;
+
+  // Dacă suntem pe pagina de articol „templată” (articol.html),
+  // folosim param ?file=XYZ.json -> slug = "XYZ.html" (exact ca la listă)
+  if (curPath.toLowerCase() === 'articol.html') {
+    var fileParam = null;
+    try {
+      var sp = new URLSearchParams(location.search);
+      fileParam = sp.get('file');
+    } catch(e){}
+
+    if (!fileParam) {
+      // fără ?file= nu avem ce contoriza specific
+      return;
+    }
+
+    var base = fileParam.replace(/\.json$/i,''); // ex: boala-renala
+    slug = vmMetaSlugFromUrl(base + '.html');    // -> boala-renala.html -> boala-renala_html.json
+  } else {
+    // pentru alte pagini .html (dacă ai articole statice individuale)
+    slug = vmMetaSlugFromUrl('/' + curPath);
+  }
+
   vmTrackViewOncePer12h(slug);
 })();
+
 // ============== VM: META pe pagina "articole.html" (liste) ==============
 (function(){
   // Rulează doar pe pagina publică articole.html
